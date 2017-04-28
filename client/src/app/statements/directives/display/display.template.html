@@ -1,0 +1,41 @@
+<blockquote class="blockquote">
+    <p class="mb-0" ng-switch on="variant">
+        <sup><i class="fa fa-fw fa-quote-left text-primary" aria-hidden="true"></i></sup>
+        <span class="sr-only">&quot;</span>
+
+        <a ng-href="/statements/view/{{statement._id}}" ng-switch-when="browse">{{statement.text}}</a>
+        <span ng-switch-default>{{statement.text}}</span>
+
+        <span class="sr-only">&quot;</span>
+        <sup><i class="fa fa-fw fa-quote-right text-primary" aria-hidden="true"></i></sup>
+    </p>
+    <footer class="blockquote-footer" ng-show="statement.author">
+        {{statement.author}} <span ng-show="statement.citation">(<cite title="{{statement.citation}}">{{statement.citation}}</cite>)</span>
+    </footer>
+</blockquote>
+
+<div class="row">
+    <div class="col-lg-6 col-md-12" ng-show="statement.score">
+        <dl class="row mb-0">
+            <dt class="col-lg-3 col-md-4">Score</dt>
+            <dd class="col-lg-9 col-md-8">{{statement.score.points.awarded || 'N/A'}} <small class="text-muted" ng-if="(statement.score.points.unadjusted !== undefined) && (statement.score.points.unadjusted !== null)">(out of {{statement.score.points.unadjusted}})</small></dd>
+
+            <dt class="col-lg-3 col-md-4">Feedback</dt>
+            <dd class="col-lg-9 col-md-6">{{statement.score.feedback}}</dd>
+        </dl>
+    </div>
+    <div class="col-lg-6 col-md-12" ng-show="rating">
+        <dl class="row mb-0">
+            <dt class="col-lg-4 col-md-4">Average Rating</dt>
+            <dd class="col-lg-8 col-md-8">
+                {{statement.rating.average | number}} / 5.0<br/>
+                <small class="text-muted">(<ng-pluralize count="statement.rating.ratings.length" when="{'0': 'No ratings yet', 'one': 'Only 1 rating so far', 'other': '{} total ratings'}"></ng-pluralize>)</small>
+            </dd>
+
+            <dt class="col-lg-4 col-md-4">Your Rating</dt>
+            <dd class="col-lg-8 col-md-8" ng-class="{ 'text-warning': statement.rating.session > 0 }">
+                <statement-rating ng-model="statement.rating.session" max="5"></statement-rating>
+            </dd>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="jumbotron jumbotron-fluid py-5">
+    <div class="container" ng-switch="routeParams.sort">
+        <h2 ng-switch-default>Top Scoring Statements</h2>
+        <h5 class="text-muted" ng-switch-default>These are the top scoring statements of all time (<em>of all time</em>).</h5>
+
+        <h2 ng-switch-when="date">Newest Statements</h2>
+        <h5 class="text-muted" ng-switch-when="date">What managers all around the globe are saying right this instant.</h5>
+
+        <h2 ng-switch-when="rating">Best Rated Statements</h2>
+        <h5 class="text-muted" ng-switch-when="rating">Like a daily standup, but not completely useless...</h5>
+    </div>
+</div>
+
+<div class="container mb-5">
+
+    <div class="alert alert-info" role="alert" ng-hide="statements">
+        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Fetching statements...
+    </div>
+
+    <div class="alert alert-warning" role="alert" ng-show="statements && !statements.length">
+        <strong>That's odd...</strong> There's nothing in the mainframe matching your query. HR must have
+        <strike>redacted</strike> processed everything.
+    </div>
+
+    <div class="card card-outline mb-4" ng-show="statements && statements.length" ng-repeat="statement in statements">
+
+        <div class="card-block">
+
+            <statement-display statement="statement" variant="browse"></statement-display>
+
+        </div>
+
+        <div class="card-footer text-muted text-center">
+            Submitted on {{statement.created | date}}
+        </div>
+
+    </div>
+
+</div>

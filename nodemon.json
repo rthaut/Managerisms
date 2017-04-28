@@ -1,0 +1,11 @@
+{
+    "verbose": false,
+    "watch": [
+        "index.js",
+        "configs/*",
+        "server/*"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    }
+}
