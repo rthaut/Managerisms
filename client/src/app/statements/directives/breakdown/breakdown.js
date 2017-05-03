@@ -2,29 +2,29 @@ angular.module('statements')
 
   .directive('statementBreakdown', function () {
     return {
-      restrict: 'E',
-      scope: {
-        breakdown: '='
+      "restrict": 'E',
+      "scope": {
+        "breakdown": '='
       },
-      templateUrl: '/app/statements/directives/breakdown/breakdown.template.html'
+      "templateUrl": '/app/statements/directives/breakdown/breakdown.template.html'
     };
   })
 
   .directive('breakdownPopover', function () {
     return {
-      restrict: 'A',
-      scope: {
-        item: '='
+      "restrict": 'A',
+      "scope": {
+        "item": '='
       },
-      link: function (scope, element, attrs) {
-        const item = scope.item;
+      "link": function (scope, element, attrs) {
+        var item = scope.item;
         $(element).popover({
           'animation': false,
-          //'constraints': [{ 'to': 'window', 'pin': ['left', 'right'] }], // fixes window overflow, but arrow is misaligned
+          //'varraints': [{ 'to': 'window', 'pin': ['left', 'right'] }], // fixes window overflow, but arrow is misaligned
           'container': 'body',
           'content': function () {
 
-            let val;
+            var val;
             if ((item.phrase !== undefined) && (item.phrase !== null)) {
               val = item.phrase;
             } else if ((item.word !== undefined) && (item.word !== null)) {
@@ -33,12 +33,12 @@ angular.module('statements')
               return false;
             }
 
-            let classification = '<span class="text-muted">Unknown</span>';
+            var classification = '<span class="text-muted">Unknown</span>';
             if (val.classification && val.classification.length) {
               classification = '<span class="text-capitalize">' + val.classification.join(', ') + '</span>';
             }
 
-            let points = '<span class="text-muted">N/A</span>';
+            var points = '<span class="text-muted">N/A</span>';
             if (item.points !== undefined) {
               points = item.points;
               if ((val.points !== undefined) && (val.points !== null)) {
@@ -46,9 +46,9 @@ angular.module('statements')
               }
             }
 
-            let uses = val.uses || 0;
+            var uses = val.uses || 0;
 
-            let content = '<dl class="row">';
+            var content = '<dl class="row">';
 
             // this is only when analyzing a statement prior to submission
             // submitted statements are always valid, so showing the validation indicator is unnecessary
@@ -67,9 +67,9 @@ angular.module('statements')
               content += '</dd >';
             }
 
-            content += `<dt class="col-6">Classification(s)</dt><dd class="col-6">${classification}</dd>`;
-            content += `<dt class="col-6">Points Awarded</dt><dd class="col-6">${points}</dd>`;
-            content += `<dt class="col-6">Total Uses</dt><dd class="col-6">${uses}</dd>`;
+            content += '<dt class="col-6">Classification(s)</dt><dd class="col-6">' + classification + '</dd>';
+            content += '<dt class="col-6">Points Awarded</dt><dd class="col-6">' + points + '</dd>';
+            content += '<dt class="col-6">Total Uses</dt><dd class="col-6">' + uses + '</dd>';
 
             content += '</dl>';
 
@@ -79,8 +79,8 @@ angular.module('statements')
           'placement': 'top',
           'title': function () {
 
-            let type = 'Unknown Type';
-            let value = 'Unknown Value';
+            var type = 'Unknown Type';
+            var value = 'Unknown Value';
             if ((item.phrase !== undefined) && (item.phrase !== null)) {
               type = 'Phrase';
               value = item.phrase.value;
@@ -89,12 +89,12 @@ angular.module('statements')
               value = item.word.value;
             }
 
-            let color = 'text-primary';
+            var color = 'text-primary';
             if (item.valid !== undefined) {
               color = (item.valid) ? 'text-success' : 'text-danger';
             }
 
-            return `<span>${type}</span>: <span class="text-capitalize ${color}">${value}</span>`;
+            return '<span>' + type + '</span>: <span class="text-capitalize ' + color + '">' + value + '</span>';
           },
           'trigger': 'hover focus'
         });

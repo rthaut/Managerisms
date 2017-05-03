@@ -3,16 +3,16 @@ angular.module('statements', [])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/statements/browse/:sort?/:direction?/:offset?', {
-        templateUrl: 'app/statements/browse.template.html',
-        controller: 'StatementsBrowseCtrl'
+        "templateUrl": 'app/statements/browse.template.html',
+        "controller": 'StatementsBrowseCtrl'
       })
       .when('/statements/create', {
-        templateUrl: 'app/statements/create.template.html',
-        controller: 'StatementCreateCtrl'
+        "templateUrl": 'app/statements/create.template.html',
+        "controller": 'StatementCreateCtrl'
       })
       .when('/statements/view/:statementId', {
-        templateUrl: 'app/statements/view.template.html',
-        controller: 'StatementViewCtrl'
+        "templateUrl": 'app/statements/view.template.html',
+        "controller": 'StatementViewCtrl'
       })
   }])
 
@@ -45,7 +45,7 @@ angular.module('statements', [])
       $http.post('/api/statements/analyze',
         { 'text': $scope.statement.text }
       ).then(function (response) {
-        const analysis = response.data;
+        var analysis = response.data;
 
         $scope.statement.text = analysis.formatted;
         $scope.breakdown = analysis.breakdown;
@@ -53,7 +53,7 @@ angular.module('statements', [])
 
         $scope.validation = {};
         $scope.validation.valid = analysis.validation.valid || false;
-        $scope.validation.breakdown = analysis.breakdown.reduce((acc, val) => acc && val.valid, true);
+        $scope.validation.breakdown = analysis.breakdown.reduce(function (acc, val) { return acc && val.valid; }, true);
         $scope.validation.syntax = analysis.validation.syntax || false;
       }).catch(function (error) {
         if (error.data.errmsg) {

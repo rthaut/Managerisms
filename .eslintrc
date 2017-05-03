@@ -1,0 +1,20 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "$": 1,
+    "angular": 1
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "curly": ["error", "multi-line"],
+    "no-console": 0,
+    "no-unused-vars": ["error", {
+      "args": "none"
+    }],
+    "prefer-const": ["error"],
+    "quote-props": ["error", "always"]
+  }
+}
