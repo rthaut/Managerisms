@@ -39,3 +39,4 @@ jspm_packages
 resources
 Thumbs.db
 configs/modules/**
+client/dist
