@@ -1,27 +1,32 @@
 <nav class="navbar navbar-toggleable-sm navbar-inverse bg-inverse" ng-controller="NavbarCtrl">
 
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container">
 
-    <a class="navbar-brand" href="/">
-        <!--<img src="/img/logo.png" height="100" class="d-inline-block align-top" alt="Managerisms | Exemplification of Vacuous Communication">-->
-        Managerisms<br/>
-        <small class="text-muted">Exemplification of Vacuous Communication</small>
-    </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle Navigation">
+            <span class="navbar-toggler-icon"></span>
+            <small class="text-muted">MENU</small>
+        </button>
 
-    <div class="collapse navbar-collapse mt-auto" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item" ng-class="{active: locationEquals('/statements/create')}">
-                <a class="nav-link" href="/statements/create">Compose</a>
-            </li>
-            <li class="nav-item" ng-class="{active: locationStartsWith('/statements/browse')}">
-                <a class="nav-link" href="/statements/browse">Browse</a>
-            </li>
-            <li class="nav-item" ng-class="{active: locationEquals('/about/scoring')}">
-                <a class="nav-link" href="/about/scoring">Scoring</a>
-            </li>
-        </ul>
+        <a class="navbar-brand" href="/">
+            <!--<img src="/img/logo.png" height="100" class="d-inline-block align-top" alt="Managerisms | Exemplification of Vacuous Communication">-->
+            Managerisms<br/>
+            <small class="text-muted hidden-sm-down">Exemplification of Vacuous Communication</small>
+        </a>
+
+        <div class="collapse navbar-collapse mt-auto" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" ng-class="{active: locationEquals('/statements/create')}">
+                    <a class="nav-link" href="/statements/create">Compose</a>
+                </li>
+                <li class="nav-item" ng-class="{active: locationStartsWith('/statements/browse')}">
+                    <a class="nav-link" href="/statements/browse">Browse</a>
+                </li>
+                <li class="nav-item" ng-class="{active: locationEquals('/about/scoring')}">
+                    <a class="nav-link" href="/about/scoring">Scoring</a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 </nav>
