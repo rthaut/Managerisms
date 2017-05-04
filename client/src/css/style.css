@@ -1,0 +1,22 @@
+
+/* fix for container in navbars collapsing on xs viewports */
+@media (max-width: 575px) {
+  .navbar-toggleable > .container {
+    width: 100%;
+  }
+  .navbar-toggleable-xs > .container {
+    width: 100%;
+  }
+  .navbar-toggleable-sm > .container {
+    width: 100%;
+  }
+  .navbar-toggleable-md > .container {
+    width: 100%;
+  }
+  .navbar-toggleable-lg > .container {
+    width: 100%;
+  }
+  .navbar-toggleable-xl > .container {
+    width: 100%;
+  }
+}
