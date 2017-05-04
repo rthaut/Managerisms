@@ -36,6 +36,8 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
+# Miscellaneous
+.env
 resources
 Thumbs.db
 client/dist
