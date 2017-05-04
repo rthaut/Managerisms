@@ -4,8 +4,6 @@ const https = require('https');
 
 // Configuration
 const config = require('../configs');
-//const privateKey = fs.readFileSync(__dirname + '/cert/privatekey.pem').toString();
-//const certificate = fs.readFileSync(__dirname + '/cert/certificate.pem').toString();
 
 const app = require('express')();
 const session = require('express-session');
@@ -21,11 +19,11 @@ app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 // MongoDB connection
 const mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
-mongoose.connect(`mongodb://${config.database.username}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.database}`);
+mongoose.connect(`mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'MongoDB Connection Error'));
 conn.once('open', function() {
-  console.log("\t" + `Connected to MongoDB "${config.database.database}" database (${config.database.host}:${config.database.port})` + "\n");
+  console.log("\t" + `Connected to MongoDB "${process.env.DB_NAME}" database (${process.env.DB_HOST}:${process.env.DB_PORT})` + "\n");
 });
 
 // Session & Storage
@@ -49,14 +47,18 @@ require('./routes/api').addRoutes(app, config);
 // Client URL Routing
 require('./routes/client').addRoutes(app, config);
 
-// Servers
+// HTTP Server
 const serverHttp = http.createServer(app);
-//const serverHttps = https.createServer({key: privateKey, cert: certificate}, app);
-
-serverHttp.listen(config.server.httpPort, '0.0.0.0', 511, function () {
-  //const open = require('open');
-  //open('http://localhost:' + config.server.httpPort + '/');
+serverHttp.listen(process.env.PORT_HTTP, '0.0.0.0', 511, function () {
+  console.log("\t" + `HTTP server running - listening on port: ${process.env.PORT_HTTP}` + "\n");
 });
-console.log("\t" + `HTTP server running - listening on port: ${config.server.httpPort}` + "\n");
-//serverHttps.listen(config.server.httpsPort);
-//console.log("\t" + `HTTPS server running - listening on port: ${config.server.httpsPort}` + "\n");
+
+/*
+// HTTPS Server
+const privateKey = fs.readFileSync(__dirname + '/cert/privatekey.pem').toString();
+const certificate = fs.readFileSync(__dirname + '/cert/certificate.pem').toString();
+const serverHttps = https.createServer({key: privateKey, cert: certificate}, app);
+serverHttps.listen(process.env.PORT_HTTPS, '0.0.0.0', 511, function () {
+  console.log("\t" + `HTTPS server running - listening on port: ${process.env.PORT_HTTPS}` + "\n");
+});
+*/

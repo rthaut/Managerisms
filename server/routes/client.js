@@ -1,22 +1,27 @@
 const express = require('express');
 const favicon = require('serve-favicon')
-const path = require('path');
 
 exports.addRoutes = (app, config) => {
-  // favicon
-  app.use(favicon(config.client.distDir + '/favicon.ico'));
 
-  // src build
-  /*app.use(config.client.staticUrl, express.static(config.client.npmDir));
-  app.use(config.client.staticUrl, express.static(config.client.srcDir));
-  app.all('/*', (req, res) => {
-    res.sendFile('index.html', { root: config.client.srcDir });
-  });*/
+  if (process.env.CLIENT_ENV === 'src') {
 
-  // dist build
-  app.use(config.client.staticUrl, express.static(config.client.distDir));
-  app.all('/*', (req, res) => {
-    res.sendFile('index.html', { root: config.client.distDir });
-  });
+    // src build
+    app.use(favicon(config.client.srcDir + '/favicon.ico'));
+    app.use(process.env.STATIC_URL, express.static(config.client.npmDir));
+    app.use(process.env.STATIC_URL, express.static(config.client.srcDir));
+    app.all('/*', (req, res) => {
+      res.sendFile('index.html', { root: config.client.srcDir });
+    });
+
+  } else if (process.env.CLIENT_ENV === 'dist') {
+
+    // dist build
+    app.use(favicon(config.client.distDir + '/favicon.ico'));
+    app.use(process.env.STATIC_URL, express.static(config.client.distDir));
+    app.all('/*', (req, res) => {
+      res.sendFile('index.html', { root: config.client.distDir });
+    });
+
+  }
 
 };

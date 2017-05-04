@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>Managerisms</title>
+        <title ng-bind="meta.title" ng-init="meta.title = meta.title || 'Managerisms'">Managerisms</title>
 
         <base href="/">
 
@@ -20,11 +20,11 @@
                     m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
             })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-            ga('create', 'UA-XXXXXXXX-Y', 'auto');
+           ga('create', 'UA-XXXXX-Y', 'auto');
         </script>
     </head>
 
-    <body style="overflow-x: hidden">
+    <body style="overflow-x: hidden" ng-cloak>
 
         <header class="container-fluid px-0">
             <div navbar></div>

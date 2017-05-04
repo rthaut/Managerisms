@@ -1,6 +1,7 @@
 {
     "verbose": false,
     "watch": [
+        ".env",
         "configs/*",
         "server/*"
     ],

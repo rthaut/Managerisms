@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const gulp = require('gulp');
 
 const cssnano = require('gulp-cssnano');
@@ -7,6 +9,7 @@ const gulpIf = require('gulp-if');
 const header = require('gulp-header');
 const ngAnnotate = require('gulp-ng-annotate');
 const ngTemplate = require('gulp-angular-embed-templates');
+const replace = require('gulp-replace');
 const runSequence = require('run-sequence');
 const uglify = require('gulp-uglify');
 const useref = require('gulp-useref');
@@ -78,6 +81,11 @@ gulp.task('assets', ['assets:css', 'assets:images', 'assets:favicons']);
 
 gulp.task('useref', function () {
   return gulp.src(developDir + '/index.html')
+
+    .pipe(replace(
+      "ga('create', 'UA-XXXXX-Y', 'auto');",
+      `ga('create', '${process.env.GA_TRACKING_ID}', '${process.env.GA_COOKIE_DOMAIN}');`
+    ))
 
     // gather and build the CSS and JS files
     .pipe(useref({
