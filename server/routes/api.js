@@ -51,6 +51,23 @@ exports.addRoutes = (app, config) => {
 
   });
 
+  app.get('/api/statements/random', (req, res) => {
+
+    db.statements.find({}, '-breakdown')
+      .lean()
+      .sort({ 'rating.average': -1 })
+      .limit(10)
+      .exec().then((statements) => {
+
+        return res.json(statements[Math.floor(Math.random() * statements.length)]);
+
+      }).catch((err) => {
+        console.error('error', err);
+        return res.status(500).send(err); //@TODO determine HTTP status code to use... maybe switch on err.code?
+      });
+
+  });
+
   app.get('/api/statements/:id', (req, res) => {
 
     db.statements.findById(req.params.id)

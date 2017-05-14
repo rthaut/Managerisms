@@ -1,12 +1,27 @@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
+
         <h1>Managerisms</h1>
         <p class="lead">Exemplification of Vacuous Communication</p>
+
         <hr class="my-4">
-        <p>Have you ever heard someone with the word "Manager" in their job title say something that seemed... empty? Like they used an average amount of words, but the specific words that were used, and in that specific combination and order, didn't actually amount to anything?</p>
+
+        <div class="card mx-4">
+            <div class="card-block">
+                <h4 class="card-title text-primary">managerism</h4>
+                <h6 class="card-subtitle text-muted mb-3"><strong>man</strong>-i-j<em>uh</em>-riz-<em>uh</em>m <span class="mx-2">|</span> noun</h6>
+                <p class="card-text">a valid statement without actual meaning or purpose, typically comprised mostly of buzzwords</p>
+                <p class="card-text text-muted font-italic" ng-show="statement"><a ng-href="/statements/view/{{statement._id}}">{{statement.text}}</a></p>
+            </div>
+        </div>
+
+        <hr class="mt-4 mb-1">
+
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="/statements/create" role="button">YES! I once heard...</a>
+            <a class="btn btn-primary btn-lg mt-3" href="/statements/create" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Compose a Managerism</a>
+            <a class="btn btn-outline-primary btn-lg mt-3" href="/statements/browse" role="button"><i class="fa fa-list" aria-hidden="true"></i> Browse Managerisms</a>
         </p>
+
     </div>
 </div>
 

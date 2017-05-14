@@ -10,17 +10,25 @@ angular.module('managerisms', [
     $routeProvider
       .when('/', {
         "templateUrl": 'app/home.template.html',
-        "controller": 'MainCtrl'
+        "controller": 'HomeCtrl'
       })
       .otherwise({
         "templateUrl": 'app/404.template.html',
-        "controller": 'MainCtrl'
+        "controller": '404Ctrl'
       });
 
     $locationProvider.html5Mode(true);
   })
 
-  .controller('MainCtrl', ['$scope', '$location', '$route', function ($scope, $location, $route) {
+  .controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    $http.get('/api/statements/random').then(function (data) {
+      $scope.statement = data.data;
+    });
+
+  }])
+
+  .controller('404Ctrl', ['$scope', '$location', '$route', function ($scope, $location, $route) {
 
     $scope.location = $location;
     $scope.route = $route;
