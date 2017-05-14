@@ -15,14 +15,18 @@
 
         <div class="collapse navbar-collapse mt-auto" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" ng-class="{active: locationEquals('/statements/create')}">
+                <li class="nav-item" ng-class="{'active': locationEquals('/statements/create')}">
                     <a class="nav-link" href="/statements/create">Compose</a>
                 </li>
-                <li class="nav-item" ng-class="{active: locationStartsWith('/statements/browse')}">
+                <li class="nav-item" ng-class="{'active': (locationEquals('/statements/browse') || locationStartsWith('/statements/view'))}">
                     <a class="nav-link" href="/statements/browse">Browse</a>
                 </li>
-                <li class="nav-item" ng-class="{active: locationEquals('/about/scoring')}">
-                    <a class="nav-link" href="/about/scoring">Scoring</a>
+                <li class="nav-item dropdown" ng-class="{'active': locationStartsWith('/about')}">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/about/validation">Validation</a>
+                        <a class="dropdown-item" href="/about/scoring">Scoring</a>
+                    </div>
                 </li>
             </ul>
         </div>
