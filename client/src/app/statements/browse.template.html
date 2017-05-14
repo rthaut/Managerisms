@@ -1,12 +1,12 @@
 <div class="jumbotron jumbotron-fluid py-5">
     <div class="container" ng-switch="routeParams.sort">
-        <h2 ng-switch-default>Top Scoring Statements</h2>
-        <h5 class="text-muted" ng-switch-default>These are the top scoring statements of all time (<em>of all time</em>).</h5>
+        <h2 ng-switch-default>Top Scoring Managerisms</h2>
+        <h5 class="text-muted" ng-switch-default>These are the top scoring managerisms of all time (<em>of all time</em>).</h5>
 
-        <h2 ng-switch-when="date">Newest Statements</h2>
+        <h2 ng-switch-when="date">Newest Managerisms</h2>
         <h5 class="text-muted" ng-switch-when="date">What managers all around the globe are saying right this instant.</h5>
 
-        <h2 ng-switch-when="rating">Best Rated Statements</h2>
+        <h2 ng-switch-when="rating">Best Rated Managerisms</h2>
         <h5 class="text-muted" ng-switch-when="rating">Like a daily standup, but not completely useless...</h5>
     </div>
 </div>
@@ -14,12 +14,48 @@
 <div class="container mb-5">
 
     <div class="alert alert-info" role="alert" ng-hide="statements">
-        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Fetching statements...
+        <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Fetching managerisms...
     </div>
 
     <div class="alert alert-warning" role="alert" ng-show="statements && !statements.length">
         <strong>That's odd...</strong> There's nothing in the mainframe matching your query. HR must have
         <strike>redacted</strike> processed everything.
+    </div>
+
+    <div class="d-flex justify-content-end mb-4" ng-show="statements && statements.length">
+
+        <div class="align-self-center mr-auto">
+            <h5 class="mb-0">Statements {{(routeParams.offset + 1)}} - {{(routeParams.offset + statements.length)}}</h5>
+        </div>
+
+        <div class="btn-group" role="group">
+            <div class="btn-group" role="group">
+                <button id="sort" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort</button>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="sort">
+                    <a class="dropdown-item" ng-href="/statements/browse/score">
+                        <i class="fa fa-check text-success" ng-show="routeParams.sort == 'score'" aria-hidden="true"></i> Score
+                    </a>
+                    <a class="dropdown-item" ng-href="/statements/browse/rating">
+                        <i class="fa fa-check text-success" ng-show="routeParams.sort == 'rating'" aria-hidden="true"></i> Rating
+                    </a>
+                    <a class="dropdown-item" ng-href="/statements/browse/date">
+                        <i class="fa fa-check text-success" ng-show="routeParams.sort == 'date'" aria-hidden="true"></i> Date
+                    </a>
+                </div>
+            </div>
+            <div class="btn-group" role="group">
+                <button id="direction" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Direction</button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="direction">
+                    <a class="dropdown-item" ng-href="/statements/browse/{{routeParams.sort}}/down">
+                        <i class="fa fa-check text-success" ng-show="routeParams.direction == 'down'" aria-hidden="true"></i> Down <small class="text-muted">(Descending)</small>
+                    </a>
+                    <a class="dropdown-item" ng-href="/statements/browse/{{routeParams.sort}}/up">
+                        <i class="fa fa-check text-success" ng-show="routeParams.direction == 'up'" aria-hidden="true"></i> Up <small class="text-muted">(Ascending)</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="card card-outline mb-4" ng-show="statements && statements.length" ng-repeat="statement in statements">
@@ -35,5 +71,16 @@
         </div>
 
     </div>
+
+    <nav ng-show="statements.length >= 10">
+        <ul class="pagination pagination-lg justify-content-center">
+            <li class="page-item" ng-class="{ 'disabled': (!routeParams.offset || routeParams.offset < 10) }">
+                <a class="page-link" ng-href="/statements/browse/{{routeParams.sort}}/{{routeParams.direction}}/{{(routeParams.offset - 10)}}">Previous</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" ng-href="/statements/browse/{{routeParams.sort}}/{{routeParams.direction}}/{{(routeParams.offset + 10)}}">Next</a>
+            </li>
+        </ul>
+    </nav>
 
 </div>

@@ -18,11 +18,13 @@ angular.module('statements', [])
 
   .controller('StatementsBrowseCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
 
-    $scope.routeParams = $routeParams;
+    var routeParams = angular.merge({ 'sort': 'score', 'direction': 'down', 'offset': 0 }, $routeParams);
+    routeParams.offset = parseInt(routeParams.offset, 10);
+    $scope.routeParams = routeParams;
 
-    $http.get('/api/statements').then(function (data) {
+    $http.get('/api/statements', { 'params': $routeParams }).then(function (data) {
       $scope.statements = data.data;
-    }, function (error) {
+    }).catch(function (error) {
       if (error.data.errmsg) {
         $scope.error = error.data.errmsg;
       } else if (error.data) {
