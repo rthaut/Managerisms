@@ -16,7 +16,9 @@ angular.module('statements', [])
       })
   }])
 
-  .controller('StatementsBrowseCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+  .controller('StatementsBrowseCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
+
+    meta({ 'title': 'Browse Managerisms | Managerisms' });
 
     var routeParams = angular.merge({ 'sort': 'score', 'direction': 'down', 'offset': 0 }, $routeParams);
     routeParams.offset = parseInt(routeParams.offset, 10);
@@ -36,7 +38,9 @@ angular.module('statements', [])
 
   }])
 
-  .controller('StatementCreateCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+  .controller('StatementCreateCtrl', ['$scope', '$http', '$location', 'meta', function ($scope, $http, $location, meta) {
+
+    meta({ 'title': 'Compose a Managerism | Managerisms' });
 
     $scope.analyze = function () {
       $scope.analyzing = true;
@@ -123,15 +127,31 @@ angular.module('statements', [])
 
   }])
 
-  .controller('StatementViewCtrl', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+  .controller('StatementViewCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
+
+    meta({ 'title': 'View a Managerism | Managerisms' });
 
     $http.get('/api/statements/' + $routeParams.statementId).then(function (response) {
-      $scope.statement = response.data;
+      var statement = response.data;
+
+      meta({
+        'title': statement.text.trail(60) + ' | Managerisms',
+        'twitter': {
+          'card': 'summary',
+          //'site': '@managerisms_bot',
+          'title': 'This Managerism Scored ' + statement.score.points.awarded + ' Points and is Currently Rated ' + statement.rating.average + ' (out of 5)',
+          'description': statement.text
+        }
+      });
+
+      $scope.statement = statement;
+
       $scope.$watch('statement.rating.session', function (newRating, oldRating) {
         if (oldRating !== newRating) {
           $scope.rateStatement(newRating);
         }
       });
+
     }).catch(function (error) {
       if (error.data.errmsg) {
         $scope.error = error.data.errmsg;

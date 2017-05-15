@@ -5,7 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title ng-bind="meta.title" ng-init="meta.title = meta.title || 'Managerisms'">Managerisms</title>
+        <title ng-bind="meta.title">Managerisms</title>
+        <meta name="description" content="Exemplification of Vacuous Communication" />
+
+        <meta name="twitter:card" content="{{meta.twitter.card}}" ng-if="meta.twitter.card" />
+        <meta name="twitter:site" content="{{meta.twitter.site}}" ng-if="meta.twitter.site" />
+        <meta name="twitter:title" content="{{meta.twitter.title}}" ng-if="meta.twitter.title" />
+        <meta name="twitter:description" content="{{meta.twitter.description}}" ng-if="meta.twitter.description" />
 
         <base href="/">
 
@@ -53,11 +59,13 @@
 
         <!-- build:js /js/managerisms.min.js -->
         <script type="text/javascript" src="/app/app.js"></script>
+        <script type="text/javascript" src="/app/services/meta.service.js"></script>
         <script type="text/javascript" src="/app/views/navbar/navbar.js"></script>
         <script type="text/javascript" src="/app/statements/statements.js"></script>
         <script type="text/javascript" src="/app/statements/directives/breakdown/breakdown.js"></script>
         <script type="text/javascript" src="/app/statements/directives/display/display.js"></script>
         <script type="text/javascript" src="/app/statements/directives/rating/rating.js"></script>
+        <script type="text/javascript" src="/js/scripts.js"></script>
         <!-- endbuild -->
     </body>
 
