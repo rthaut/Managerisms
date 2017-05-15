@@ -1,0 +1,8 @@
+when sorting statements by rating (in the API), need to also sort by number of ratings
+- statements with the same average rating but more total ratings should be listed first
+
+rating a statement from the browse page does not actually send the rating to the server
+- need to make a new controller and directive for statements that wraps ALL related functionality
+
+statement client UI rating control uses a $watch to save the rating to the DB
+- this directive should be rewritten (as part of the new statement directive) to do this w/o a $watch
