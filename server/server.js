@@ -47,18 +47,42 @@ require('./routes/api').addRoutes(app, config);
 // Client URL Routing
 require('./routes/client').addRoutes(app, config);
 
-// HTTP Server
-const serverHttp = http.createServer(app);
-serverHttp.listen(process.env.PORT_HTTP, '0.0.0.0', 511, function () {
-  console.log("\t" + `HTTP server running - listening on port: ${process.env.PORT_HTTP}` + "\n");
+// Let's Encrypt Middleware
+const lex = require('greenlock-express').create({
+  //debug: true,
+  //server: 'staging',
+  server: 'https://acme-v01.api.letsencrypt.org/directory',
+
+  store: require('le-store-certbot').create({
+    //debug: true,
+    configDir: 'etc/letsencrypt',
+    webrootPath: '/tmp/letsencrypt/.well-known/acme-challenge'
+  }),
+
+  challenges: {
+    'http-01': require('le-challenge-fs').create({
+      //debug: true,
+      webrootPath: '/tmp/letsencrypt/.well-known/acme-challenge'
+    }),
+    'tls-sni-01': require('le-challenge-sni').create({
+      //debug: true,
+    }),
+    'tls-sni-02': require('le-challenge-sni').create({
+      //debug: true,
+    })
+  },
+
+  approveDomains: [process.env.DOMAIN]
 });
 
-/*
-// HTTPS Server
-const privateKey = fs.readFileSync(__dirname + '/cert/privatekey.pem').toString();
-const certificate = fs.readFileSync(__dirname + '/cert/certificate.pem').toString();
-const serverHttps = https.createServer({key: privateKey, cert: certificate}, app);
-serverHttps.listen(process.env.PORT_HTTPS, '0.0.0.0', 511, function () {
-  console.log("\t" + `HTTPS server running - listening on port: ${process.env.PORT_HTTPS}` + "\n");
+// HTTP Server
+const serverHttp = require('http').createServer(lex.middleware(app));
+serverHttp.listen(process.env.PORT_HTTP, function () {
+  console.log("\t" + "HTTP server running - listening on", this.address());
 });
-*/
+
+// HTTPS Server
+const serverHttps = require('https').createServer(lex.httpsOptions, lex.middleware(app));
+serverHttps.listen(process.env.PORT_HTTPS, function () {
+  console.log("\t" + "HTTPS server running - listening on", this.address());
+});
