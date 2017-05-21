@@ -29,7 +29,7 @@ conn.once('open', function() {
 // Session & Storage
 const mongoStore = require('connect-mongo')(session);
 app.use(session({
-  secret: config.session.secret,
+  secret: process.env.SESSION_SECRET,
   store: new mongoStore({ mongooseConnection: conn }),
   saveUninitialized: true,
   resave: false,
