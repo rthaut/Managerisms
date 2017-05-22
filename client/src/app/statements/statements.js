@@ -4,19 +4,19 @@ angular.module('statements', [])
     $routeProvider
       .when('/statements/browse/:sort?/:direction?/:offset?', {
         "templateUrl": 'app/statements/browse.template.html',
-        "controller": 'StatementsBrowseCtrl'
+        "controller": 'StatementsBrowsePageCtrl'
       })
       .when('/statements/create', {
         "templateUrl": 'app/statements/create.template.html',
-        "controller": 'StatementCreateCtrl'
+        "controller": 'StatementCreatePageCtrl'
       })
       .when('/statements/view/:statementId', {
         "templateUrl": 'app/statements/view.template.html',
-        "controller": 'StatementViewCtrl'
+        "controller": 'StatementViewPageCtrl'
       })
   }])
 
-  .controller('StatementsBrowseCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
+  .controller('StatementsBrowsePageCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
 
     meta({ 'title': 'Browse Managerisms | Managerisms' });
 
@@ -38,7 +38,7 @@ angular.module('statements', [])
 
   }])
 
-  .controller('StatementCreateCtrl', ['$scope', '$http', '$location', 'meta', function ($scope, $http, $location, meta) {
+  .controller('StatementCreatePageCtrl', ['$scope', '$http', '$location', 'meta', function ($scope, $http, $location, meta) {
 
     meta({ 'title': 'Compose a Managerism | Managerisms' });
 
@@ -127,7 +127,7 @@ angular.module('statements', [])
 
   }])
 
-  .controller('StatementViewCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
+  .controller('StatementViewPageCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
 
     meta({ 'title': 'View a Managerism | Managerisms' });
 
