@@ -1,20 +1,14 @@
 angular.module('statements')
 
-  .constant('config', {
-    "max": 5,
-    "stateOn": null,
-    "stateOff": null,
-    "enableReset": true,
-    "titles": ['one', 'two', 'three', 'four', 'five']
-  })
-
-  .controller('StatementRatingCtrl', ['$scope', '$attrs', 'config', function ($scope, $attrs, config) {
+  .controller('StatementRatingCtrl', ['$scope', '$attrs', function ($scope, $attrs) {
     var ngModelCtrl = { "$setViewValue": angular.noop };
-    var self = this;
+    var statementCtrl;
 
-    this.init = function (ngModelCtrl_) {
+    this.init = function (ngModelCtrl_, statementCtrl_) {
       ngModelCtrl = ngModelCtrl_;
       ngModelCtrl.$render = this.render;
+
+      statementCtrl = statementCtrl_;
 
       ngModelCtrl.$formatters.push(function (value) {
         if (angular.isNumber(value) && value << 0 !== value) {
@@ -24,38 +18,25 @@ angular.module('statements')
         return value;
       });
 
-      this.stateOn = angular.isDefined($attrs.stateOn) ? $scope.$parent.$eval($attrs.stateOn) : config.stateOn;
-      this.stateOff = angular.isDefined($attrs.stateOff) ? $scope.$parent.$eval($attrs.stateOff) : config.stateOff;
-      this.enableReset = angular.isDefined($attrs.enableReset) ? $scope.$parent.$eval($attrs.enableReset) : config.enableReset;
-      var tmpTitles = angular.isDefined($attrs.titles) ? $scope.$parent.$eval($attrs.titles) : config.titles;
-      this.titles = angular.isArray(tmpTitles) && tmpTitles.length > 0 ? tmpTitles : config.titles;
+      //@TODO make each rating an array of possible values?
+      $scope.titles = [
+        "Sad. So Sad.",
+        "This needs to be refactored.",
+        "I don't dislike it...",
+        "Yeah, that's what I'm talking about.",
+        "Mind: Blown."
+      ];
 
-      var ratingStates = angular.isDefined($attrs.ratingStates) ?
-        $scope.$parent.$eval($attrs.ratingStates) :
-        new Array(angular.isDefined($attrs.max) ? $scope.$parent.$eval($attrs.max) : config.max);
-      $scope.range = this.buildTemplateObjects(ratingStates);
+      // primarily call render now to set the ARIA slider text value
+      this.render();
     };
 
-    this.buildTemplateObjects = function (states) {
-      for (var i = 0, n = states.length; i < n; i++) {
-        states[i] = angular.extend({ "index": i }, { "stateOn": this.stateOn, "stateOff": this.stateOff, "title": this.getTitle(i) }, states[i]);
-      }
-      return states;
-    };
-
-    this.getTitle = function (index) {
-      if (index >= this.titles.length) {
-        return index + 1;
-      }
-
-      return this.titles[index];
-    };
-
-    $scope.rate = function (value) {
-      if (!$scope.readonly && value >= 0 && value <= $scope.range.length) {
-        var newViewValue = self.enableReset && ngModelCtrl.$viewValue === value ? 0 : value;
+    $scope.click = function (value) {
+      if (!$attrs.readonly && value >= 0 && value <= 5) {
+        var newViewValue = ngModelCtrl.$viewValue === value ? 0 : value;
         ngModelCtrl.$setViewValue(newViewValue);
         ngModelCtrl.$render();
+        statementCtrl.rate(newViewValue);
       }
     };
 
@@ -73,13 +54,13 @@ angular.module('statements')
 
     this.render = function () {
       $scope.value = ngModelCtrl.$viewValue;
-      $scope.title = self.getTitle($scope.value - 1);
+      $scope.valueText = $scope.titles[$scope.value - 1];
     };
   }])
 
   .directive('statementRating', function () {
     return {
-      "require": ['statementRating', 'ngModel'],
+      "require": ['statementRating', 'ngModel', '^^statement'],
       "restrict": 'E',
       "scope": {
         "readonly": '=?readOnly',
@@ -89,8 +70,8 @@ angular.module('statements')
       "controller": 'StatementRatingCtrl',
       "templateUrl": '/app/statements/directives/rating/rating.template.html',
       "link": function (scope, element, attrs, ctrls) {
-        var ratingCtrl = ctrls[0], ngModelCtrl = ctrls[1];
-        ratingCtrl.init(ngModelCtrl);
+        var ratingCtrl = ctrls[0], ngModelCtrl = ctrls[1], statementCtrl = ctrls[2];
+        ratingCtrl.init(ngModelCtrl, statementCtrl);
       }
     };
   });
