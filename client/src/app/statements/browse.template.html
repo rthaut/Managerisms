@@ -62,7 +62,9 @@
 
         <div class="card-block">
 
-            <statement-display statement="statement" variant="browse"></statement-display>
+            <statement statement="statement"></statement>
+
+            <a class="btn btn-lg btn-primary btn-block mt-5" ng-href="/statements/view/{{statement._id}}" role="button" ng-show="!statement.breakdown"><i class="fa fa-lg fa-info-circle" aria-hidden="true"></i> View Detailed Breakdown</a>
 
         </div>
 

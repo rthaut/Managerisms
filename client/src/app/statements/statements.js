@@ -146,12 +146,6 @@ angular.module('statements', [])
 
       $scope.statement = statement;
 
-      $scope.$watch('statement.rating.session', function (newRating, oldRating) {
-        if (oldRating !== newRating) {
-          $scope.rateStatement(newRating);
-        }
-      });
-
     }).catch(function (error) {
       if (error.data.errmsg) {
         $scope.error = error.data.errmsg;
@@ -161,23 +155,5 @@ angular.module('statements', [])
         $scope.error = error;
       }
     });
-
-    $scope.rateStatement = function (rating) {
-
-      $http.post('/api/statements/' + $routeParams.statementId + '/ratings/',
-        { 'rating': rating }
-      ).then(function (response) {
-        $scope.statement.rating = angular.extend($scope.statement.rating, response.data);
-      }).catch(function (error) {
-        if (error.data.errmsg) {
-          $scope.error = error.data.errmsg;
-        } else if (error.data) {
-          $scope.error = error.data;
-        } else {
-          $scope.error = error;
-        }
-      });
-
-    };
 
   }])
