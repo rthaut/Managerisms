@@ -1121,7 +1121,7 @@ hell,"noun,interjection"
 hello,"interjection,noun"
 help,"verb,noun,interjection"
 helpful,adjective
-her,pronoun
+her,"pronoun,possessive pronoun"
 here,"adverb,interjection"
 herself,pronoun
 hesitate,verb
@@ -1134,7 +1134,7 @@ highway,noun
 him,pronoun
 himself,pronoun
 hire,"verb,noun,adjective,idiom"
-his,"pronoun,adjective"
+his,"possessive pronoun,adjective"
 historian,noun
 historical,adjective
 history,noun
@@ -1254,7 +1254,7 @@ island,"noun,verb"
 issue,"noun,verb"
 it,"pronoun,noun"
 item,"noun,adverb"
-its,pronoun
+its,"pronoun,possessive pronoun"
 itself,pronoun
 jacket,"noun,verb"
 job,"noun,verb"
@@ -1563,7 +1563,7 @@ originally,adverb
 other,"adjective,noun,pronoun,adverb"
 otherwise,"adverb,adjective"
 ought,verb
-our,pronoun
+our,possessive pronoun
 ourselves,pronoun
 out,"adverb,preposition,adjective,interjection"
 outcome,noun
@@ -2217,7 +2217,7 @@ thank,verb
 thanks,noun
 that,"pronoun,adjective,adverb,conjunction"
 the,"article,adverb"
-their,pronoun
+their,possessive pronoun
 them,pronoun
 theme,"noun,verb"
 themselves,pronoun
@@ -2455,7 +2455,7 @@ yesterday,"adverb,noun"
 yet,"adverb,conjunction"
 you,"pronoun,noun"
 young,"adjective,noun"
-your,pronoun
+your,possessive pronoun
 yours,pronoun
 yourself,pronoun
 youth,noun
