@@ -49,7 +49,17 @@
 
             <div ng-hide="!validation.valid" class="mb-3">
 
-                <statement-display statement="statement" variant="create" rating="false"></statement-display>
+                <blockquote class="blockquote">
+                    <p class="mb-0">
+                        <sup><i class="fa fa-fw fa-quote-left text-primary" aria-hidden="true"></i></sup>
+                        <span class="sr-only">&quot;</span>
+
+                        <span>{{statement.text}}</span>
+
+                        <span class="sr-only">&quot;</span>
+                        <sup><i class="fa fa-fw fa-quote-right text-primary" aria-hidden="true"></i></sup>
+                    </p>
+                </blockquote>
 
                 <form class="form-inline" name="submitForm" ng-submit="submit()">
                     <label class="sr-only" for="author">Author</label>
