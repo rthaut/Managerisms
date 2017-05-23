@@ -5,24 +5,91 @@ const helpers = require('../lib/');
 
 exports.addRoutes = (app, config) => {
 
+  //@TODO the complex aggregation used here is really only needed for sorting by rating...
+  //      perhaps it would be better to use a normal find({}) for everything else instead
   app.get('/api/statements', (req, res) => {
 
-    let sort = { 'score.points.awarded': -1 };
+    let sort = { 'statement.score.points.awarded': -1 };
     if (req.query.sort) {
       switch (req.query.sort) {
         case 'date':
-          sort = { 'created': -1 };
+          sort = { 'statement.created': -1 };
           break;
 
         case 'rating':
-          sort = { 'rating.average': -1 };
+          sort = { 'statement.rating.average': -1, 'ratingCount': -1 };
           break;
       }
     }
 
+    let limit = Math.abs(req.query.limit) || 10;
+    let offset = Math.abs(req.query.offset) || 0;
+
     //@TODO support for date range (i.e. today's best)?
 
-    //@TODO pagination
+    db.statements.aggregate([
+
+      // expand the ratings into a flat collection
+      { '$unwind': '$rating.ratings' },
+
+      // calculate the number of ratings per statement (so it can be used for sorting)
+      {
+        '$group': {
+          '_id': '$_id',
+          'ratingCount': { '$sum': 1 }
+        }
+      },
+
+      // retrieve the full statement object for each result from the grouping
+      { '$lookup': { 'from': 'statements', 'localField': '_id', 'foreignField': '_id', 'as': 'statement' } },
+
+      // remove the session_id and and breakdown from the session objects
+      {
+        '$project': {
+          'statement.session_id': 0,
+          'statement.breakdown': 0
+        }
+      },
+
+      { '$sort': sort },
+      { '$skip': offset },
+      { '$limit': limit }
+    ])
+      .exec().then((results) => {
+
+        let statements = [];
+
+        for (let i = 0; i < results.length; i++) {
+
+          // the actual statement object is nested as the first item from an array called 'statement' (due to $lookup)
+          let statement = results[i].statement[0];
+
+          // copy in the count of ratings for ease of use
+          statement.rating.count = results[i].ratingCount;
+
+          // populate the session's rating value for the statement
+          statement.rating.session = 0;
+          if (req.session.ratings) {
+            statement.rating.session = req.session.ratings[statement._id] || 0;
+          }
+
+          // add the massaged statement to the return array
+          statements.push(statement);
+
+        }
+
+        return res.json(statements);
+
+      }).catch((err) => {
+        console.error('error', err);
+        return res.status(500).send(err);
+      });
+
+  });
+
+  app.get('/api/statements', (req, res) => {
+
+
 
     //@TODO determine what data needs to be returned here
     db.statements.find({}, '-breakdown')
