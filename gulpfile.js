@@ -127,7 +127,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('clean', function () {
-  return gulp.src(releaseDir + '/**/*', { read: false })
+  return gulp.src(releaseDir, { read: false })
 
     .pipe(clean())
 });
