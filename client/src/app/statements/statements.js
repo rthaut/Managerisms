@@ -18,7 +18,7 @@ angular.module('statements', [])
 
   .controller('StatementsBrowsePageCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
 
-    meta({ 'title': 'Browse Managerisms | Managerisms' });
+    meta({ 'title': 'Browse | Managerisms' });
 
     var routeParams = angular.merge({ 'sort': 'score', 'direction': 'down', 'offset': 0 }, $routeParams);
     routeParams.offset = parseInt(routeParams.offset, 10);
@@ -40,7 +40,7 @@ angular.module('statements', [])
 
   .controller('StatementCreatePageCtrl', ['$scope', '$http', '$location', 'meta', function ($scope, $http, $location, meta) {
 
-    meta({ 'title': 'Compose a Managerism | Managerisms' });
+    meta({ 'title': 'Compose | Managerisms' });
 
     $scope.analyze = function () {
       $scope.analyzing = true;
@@ -129,7 +129,7 @@ angular.module('statements', [])
 
   .controller('StatementViewPageCtrl', ['$scope', '$routeParams', '$http', 'meta', function ($scope, $routeParams, $http, meta) {
 
-    meta({ 'title': 'View a Managerism | Managerisms' });
+    meta({ 'title': 'View | Managerisms' });
 
     $http.get('/api/statements/' + $routeParams.statementId).then(function (response) {
       var statement = response.data;
