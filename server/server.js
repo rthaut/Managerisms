@@ -55,7 +55,7 @@ const lex = require('greenlock-express').create({
 
   store: require('le-store-certbot').create({
     //debug: true,
-    configDir: 'etc/letsencrypt',
+    configDir: '/etc/letsencrypt',
     webrootPath: '/tmp/letsencrypt/.well-known/acme-challenge'
   }),
 
@@ -82,7 +82,11 @@ serverHttp.listen(process.env.PORT_HTTP, function () {
 });
 
 // HTTPS Server
-const serverHttps = require('https').createServer(lex.httpsOptions, lex.middleware(app));
+const httpsOptions = {
+  key: fs.readFileSync(`/etc/letsencrypt/live/${process.env.DOMAIN}/privkey.pem`),
+  cert: fs.readFileSync(`/etc/letsencrypt/live/${process.env.DOMAIN}/cert.pem`)
+};
+const serverHttps = require('https').createServer(httpsOptions, lex.middleware(app));
 serverHttps.listen(process.env.PORT_HTTPS, function () {
   console.log("\t" + "HTTPS server running - listening on", this.address());
 });
