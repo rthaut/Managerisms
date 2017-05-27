@@ -4,6 +4,7 @@ const https = require('https');
 
 // Configuration
 const config = require('../configs');
+const hostname = process.env.DOMAIN;
 
 const app = require('express')();
 const session = require('express-session');
@@ -72,7 +73,7 @@ const lex = require('greenlock-express').create({
     })
   },
 
-  approveDomains: [process.env.DOMAIN]
+  approveDomains: [hostname]
 });
 
 // HTTP Server
@@ -82,11 +83,13 @@ serverHttp.listen(process.env.PORT_HTTP, function () {
 });
 
 // HTTPS Server
-const httpsOptions = {
-  key: fs.readFileSync(`/etc/letsencrypt/live/${process.env.DOMAIN}/privkey.pem`),
-  cert: fs.readFileSync(`/etc/letsencrypt/live/${process.env.DOMAIN}/cert.pem`)
-};
-const serverHttps = require('https').createServer(httpsOptions, lex.middleware(app));
-serverHttps.listen(process.env.PORT_HTTPS, function () {
-  console.log("\t" + "HTTPS server running - listening on", this.address());
-});
+if (hostname !== undefined && hostname !== null && hostname !== 'localhost') {
+  const httpsOptions = {
+    key: fs.readFileSync(`/etc/letsencrypt/live/${hostname}/privkey.pem`),
+    cert: fs.readFileSync(`/etc/letsencrypt/live/${hostname}/cert.pem`)
+  };
+  const serverHttps = require('https').createServer(httpsOptions, lex.middleware(app));
+  serverHttps.listen(process.env.PORT_HTTPS, function () {
+    console.log("\t" + "HTTPS server running - listening on", this.address());
+  });
+}
