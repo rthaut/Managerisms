@@ -9,15 +9,26 @@ exports.addRoutes = (app, config) => {
   //      perhaps it would be better to use a normal find({}) for everything else instead
   app.get('/api/statements', (req, res) => {
 
-    let sort = { 'statement.score.points.awarded': -1 };
+    let direction = -1;
+    if (req.query.direction) {
+      switch (req.query.direction) {
+        case 'up':
+        case 'asc':
+        case 'ascending':
+          direction = 1;
+          break;
+      }
+    }
+
+    let sort = { 'score.points.awarded': direction };
     if (req.query.sort) {
       switch (req.query.sort) {
         case 'date':
-          sort = { 'statement.created': -1 };
+          sort = { 'created': direction };
           break;
 
         case 'rating':
-          sort = { 'statement.rating.average': -1, 'ratingCount': -1 };
+          sort = { 'rating.average': direction, 'rating.count': direction };
           break;
       }
     }
@@ -27,86 +38,21 @@ exports.addRoutes = (app, config) => {
 
     //@TODO support for date range (i.e. today's best)?
 
-    db.statements.aggregate([
-
-      // expand the ratings into a flat collection
-      { '$unwind': '$rating.ratings' },
-
-      // calculate the number of ratings per statement (so it can be used for sorting)
-      {
-        '$group': {
-          '_id': '$_id',
-          'ratingCount': { '$sum': 1 }
-        }
-      },
-
-      // retrieve the full statement object for each result from the grouping
-      { '$lookup': { 'from': 'statements', 'localField': '_id', 'foreignField': '_id', 'as': 'statement' } },
-
-      // remove the session_id and and breakdown from the session objects
-      {
-        '$project': {
-          'statement.session_id': 0,
-          'statement.breakdown': 0
-        }
-      },
-
-      { '$sort': sort },
-      { '$skip': offset },
-      { '$limit': limit }
-    ])
-      .exec().then((results) => {
-
-        let statements = [];
-
-        for (let i = 0; i < results.length; i++) {
-
-          // the actual statement object is nested as the first item from an array called 'statement' (due to $lookup)
-          let statement = results[i].statement[0];
-
-          // copy in the count of ratings for ease of use
-          statement.rating.count = results[i].ratingCount;
-
-          // populate the session's rating value for the statement
-          statement.rating.session = 0;
-          if (req.session.ratings) {
-            statement.rating.session = req.session.ratings[statement._id] || 0;
-          }
-
-          // add the massaged statement to the return array
-          statements.push(statement);
-
-        }
-
-        return res.json(statements);
-
-      }).catch((err) => {
-        console.error('error', err);
-        return res.status(500).send(err);
-      });
-
-  });
-
-  app.get('/api/statements', (req, res) => {
-
-
-
-    //@TODO determine what data needs to be returned here
     db.statements.find({}, '-breakdown')
-      .populate('rating.ratings')
       .lean()
       .sort(sort)
+      .skip(offset)
+      .limit(limit)
       .exec().then((statements) => {
 
-        if (statements == null) {
-          return res.json([]);
-        }
-
         for (let i = 0; i < statements.length; i++) {
+
+          // populate the session's rating value for the statement
           statements[i].rating.session = 0;
           if (req.session.ratings) {
             statements[i].rating.session = req.session.ratings[statements[i]._id] || 0;
           }
+
         }
 
         return res.json(statements);
@@ -206,6 +152,8 @@ exports.addRoutes = (app, config) => {
           }
 
         }
+
+        statement.rating.count = statement.rating.ratings.length;
 
         statement.save().then((statement) => {
 
