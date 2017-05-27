@@ -55,6 +55,11 @@ let StatementSchema = new Schema({
       'default': 0,
       'required': false
     },
+    'count': {
+      'type': Number,
+      'default': 0,
+      'required': false
+    },
     'ratings': [RatingSchema]
   }
 });
