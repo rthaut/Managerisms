@@ -1,0 +1,74 @@
+<div class="alert alert-danger" role="alert" ng-show="!validation.valid">
+    <p class="mb-0">This statement is <strong>invalid</strong>, so it cannot be submitted; please review the breakdown below for more information.</p>
+</div>
+
+<div ng-hide="!validation.valid" class="mb-3">
+
+    <blockquote class="blockquote">
+        <p class="mb-0">
+            <sup><i class="fa fa-fw fa-quote-left text-primary" aria-hidden="true"></i></sup>
+            <span class="sr-only">&quot;</span>
+
+            <span>{{statement.text}}</span>
+
+            <span class="sr-only">&quot;</span>
+            <sup><i class="fa fa-fw fa-quote-right text-primary" aria-hidden="true"></i></sup>
+        </p>
+        <footer class="blockquote-footer" ng-show="statement.author">
+            {{statement.author}} <span ng-show="statement.citation">(<cite title="{{statement.citation}}">{{statement.citation}}</cite>)</span>
+        </footer>
+    </blockquote>
+
+</div>
+
+<dl class="row mb-3">
+    <dt class="col-lg-3 col-md-4">Score</dt>
+    <dd class="col-lg-9 col-md-8">{{score.points.awarded || 'N/A'}} <small class="text-muted" ng-if="(score.points.unadjusted !== undefined) && (score.points.unadjusted !== null)">(out of {{score.points.unadjusted}})</small></dd>
+
+    <dt class="col-lg-3 col-md-4">Feedback</dt>
+    <dd class="col-lg-9 col-md-6">{{score.feedback}}</dd>
+</dl>
+
+<h5 class="card-title mt-3">Statement Breakdown</h5>
+<div class="alert alert-warning" role="alert" ng-show="validation.breakdown && !validation.syntax">
+    <p class="mb-0">This statement does not seem to follow valid English syntax based on the classification of the utilized word(s) and phrase(s).</p>
+</div>
+
+<ul class="d-inline-flex flex-nowrap px-0 my-2 mw-100" style="overflow-x: auto">
+    <li class="list-inline-item d-inline list-group-item text-nowrap rounded mb-2 py-2 px-3" ng-class="{ 'bg-faded': item.valid && !validation.valid, 'list-group-item-success': validation.valid, 'list-group-item-danger': !item.valid }" ng-repeat="item in breakdown" breakdown-popover item="item">
+        <span ng-show="item.valid">{{item.phrase ? item.phrase.value : item.word.value}}</span>
+        <span ng-hide="item.valid"><del>{{item.phrase ? item.phrase.value : item.word.value}}</del></span>
+    </li>
+</ul>
+
+<hr ng-hide="!validation.valid" />
+<div class="container" ng-hide="!validation.valid">
+    <form name="submitForm" ng-submit="submit()">
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="author">Author</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="author" name="author" ng-model="statement.author" placeholder="Author (Optional)">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="citation">Citation</label>
+            <div class="input-group col-sm-9">
+                <div class="input-group-addon">(</div>
+                <input type="text" class="form-control" id="citation" name="citation" ng-model="statement.citation" placeholder="Citation (Optional)" ng-disabled="!statement.author.length">
+                <div class="input-group-addon">)</div>
+            </div>
+        </div>
+
+        <!--<div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-success" ng-disabled="submitForm.$invalid || submitting" ng-class="{ 'btn-success': submitForm.$valid, 'btn-danger': submitForm.$invalid }">
+                    <span ng-hide="submitting" class="">Submit</span>
+                    <span ng-show="submitting" class="ng-hide"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Submitting...</span>
+                </button>
+            </div>
+        </div>-->
+
+    </form>
+</div>

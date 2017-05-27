@@ -2,6 +2,7 @@ angular.module('managerisms', [
   'angulartics',
   'angulartics.google.analytics',
   'ngAnimate',
+  'ngBootbox',
   'ngRoute',
   'statements'
 ])

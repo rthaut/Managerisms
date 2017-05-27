@@ -38,7 +38,7 @@ angular.module('statements', [])
 
   }])
 
-  .controller('StatementCreatePageCtrl', ['$scope', '$http', '$location', 'meta', function ($scope, $http, $location, meta) {
+  .controller('StatementCreatePageCtrl', ['$scope', '$http', '$location', 'meta', '$ngBootbox', function ($scope, $http, $location, meta, $ngBootbox) {
 
     meta({ 'title': 'Compose | Managerisms' });
 
@@ -61,6 +61,40 @@ angular.module('statements', [])
         $scope.validation.valid = analysis.validation.valid || false;
         $scope.validation.breakdown = analysis.breakdown.reduce(function (acc, val) { return acc && val.valid; }, true);
         $scope.validation.syntax = analysis.validation.syntax || false;
+
+        var buttons = {};
+
+        buttons.cancel = {
+          'label': "Close",
+          'className': "btn-secondary",
+          'callback': function () {
+            $scope.$apply(function () {
+              $scope.clearAnalysis();
+            });
+          }
+        };
+
+        if ($scope.validation.valid) {
+          buttons.submit = {
+            'label': 'Submit',
+            'className': "btn-success",
+            'callback': function () {
+              $scope.$apply(function () {
+                $scope.submit();
+              });
+            }
+          };
+        }
+
+        $ngBootbox.customDialog({
+          'title': 'Analysis Results',
+          'size': 'large',
+          'templateUrl': 'app/statements/analysis.template.html',
+          'scope': $scope,
+          'onEscape': true,
+          'closeButton': false,
+          'buttons': buttons
+        });
       }).catch(function (error) {
         if (error.data.errmsg) {
           $scope.error = error.data.errmsg;
