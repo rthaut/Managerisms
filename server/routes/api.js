@@ -66,10 +66,11 @@ exports.addRoutes = (app, config) => {
 
   app.get('/api/statements/random', (req, res) => {
 
-    db.statements.find({}, '-breakdown')
+    let limit = Math.abs(req.query.limit) || 10;
+
       .lean()
       .sort({ 'rating.average': -1 })
-      .limit(10)
+      .limit(limit)
       .exec().then((statements) => {
 
         return res.json(statements[Math.floor(Math.random() * statements.length)]);
