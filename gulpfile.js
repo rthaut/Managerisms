@@ -4,11 +4,14 @@ const gulp = require('gulp');
 
 const cssnano = require('gulp-cssnano');
 const clean = require('gulp-clean');
+const concat = require('gulp-concat');
 const eslint = require('gulp-eslint');
 const gulpIf = require('gulp-if');
 const header = require('gulp-header');
+const htmlmin = require('gulp-htmlmin');
 const ngAnnotate = require('gulp-ng-annotate');
 const ngTemplate = require('gulp-angular-embed-templates');
+const ngTemplateCache = require('gulp-angular-templatecache');
 const replace = require('gulp-replace');
 const runSequence = require('run-sequence');
 const uglify = require('gulp-uglify');
@@ -106,16 +109,44 @@ gulp.task('ng:app', function () {
   return gulp.src(releaseDir + '/js/managerisms.min.js')
 
     // embed the HTML templates directly into the compiled app JS file
-    .pipe(ngTemplate({ basePath: developDir + '/' }))
+    //.pipe(ngTemplate({ basePath: developDir + '/' }))
 
     // inject angular dependencies
     .pipe(ngAnnotate())
+
+    // move the output to the release directory
+    .pipe(gulp.dest(releaseDir + '/js'))
+});
+
+gulp.task('ng:templates', function () {
+  return gulp.src(developDir + '/**/*.template.html')
+    .pipe(htmlmin({ collapseWhitespace: true, ignoreCustomFragments: [/\{\{[\s\S]*?\}\}/] }))
+    .pipe(ngTemplateCache('templates.min.js', { 'module': 'managerisms' }))
+    .pipe(uglify({ mangle: false }))
+    .pipe(gulp.dest(releaseDir + '/js'));
+});
+
+gulp.task('js:concat', function () {
+  return gulp.src([
+    releaseDir + '/js/managerisms.min.js',
+    releaseDir + '/js/templates.min.js',
+    releaseDir + '/js/scripts.min.js'
+  ])
+
+    // concatenate the selected files into a single file
+    .pipe(concat('managerisms.min.js'))
 
     // insert the banner at the top of the file
     .pipe(header(banner, { pkg: pkg }))
 
     // move the output to the release directory
-    .pipe(gulp.dest(releaseDir + '/js'))
+    .pipe(gulp.dest(releaseDir + '/js'));
+});
+
+gulp.task('js:clean', function () {
+  return gulp.src([releaseDir + '/js/*.js', '!' + releaseDir + '/js/managerisms.min.js'])
+
+    .pipe(clean)
 });
 
 gulp.task('watch', function () {
@@ -137,7 +168,7 @@ gulp.task('default', function (callback) {
 });
 
 gulp.task('build', ['clean'], function (callback) {
-  runSequence('lint', 'useref', 'ng:app', 'assets', callback);
+  runSequence('lint', 'useref', ['ng:app', 'ng:templates'], 'js:concat', /*'js:clean',*/ 'assets', callback);
 });
 
 gulp.task('build-watch', function (callback) {
