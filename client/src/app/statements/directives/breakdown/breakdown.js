@@ -6,7 +6,7 @@ angular.module('statements')
       "scope": {
         "breakdown": '='
       },
-      "templateUrl": '/app/statements/directives/breakdown/breakdown.template.html'
+      "templateUrl": 'app/statements/directives/breakdown/breakdown.template.html'
     };
   })
 

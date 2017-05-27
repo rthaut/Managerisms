@@ -68,7 +68,7 @@ angular.module('statements')
         "onLeave": '&'
       },
       "controller": 'StatementRatingCtrl',
-      "templateUrl": '/app/statements/directives/rating/rating.template.html',
+      "templateUrl": 'app/statements/directives/rating/rating.template.html',
       "link": function (scope, element, attrs, ctrls) {
         var ratingCtrl = ctrls[0], ngModelCtrl = ctrls[1], statementCtrl = ctrls[2];
         ratingCtrl.init(ngModelCtrl, statementCtrl);

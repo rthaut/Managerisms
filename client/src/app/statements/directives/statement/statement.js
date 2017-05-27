@@ -6,7 +6,7 @@ angular.module('statements')
       "scope": {
         "statement": '='
       },
-      "templateUrl": '/app/statements/directives/statement/statement.template.html',
+      "templateUrl": 'app/statements/directives/statement/statement.template.html',
       "controller": ['$scope', '$http', function ($scope, $http) {
         $scope.rating = true;
 

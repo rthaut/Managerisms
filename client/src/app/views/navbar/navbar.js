@@ -19,7 +19,7 @@ angular.module('managerisms')
         "statement": '='
       },
       "controller": 'NavbarCtrl',
-      "templateUrl": '/app/views/navbar/navbar.template.html'
+      "templateUrl": 'app/views/navbar/navbar.template.html'
     };
   });
 
