@@ -74,12 +74,12 @@
 
     </div>
 
-    <nav ng-show="statements.length >= 10">
+    <nav>
         <ul class="pagination pagination-lg justify-content-center">
             <li class="page-item" ng-class="{ 'disabled': (!routeParams.offset || routeParams.offset < 10) }">
                 <a class="page-link" ng-href="/statements/browse/{{routeParams.sort}}/{{routeParams.direction}}/{{(routeParams.offset - 10)}}">Previous</a>
             </li>
-            <li class="page-item">
+            <li class="page-item" ng-class="{ 'disabled': statements.length < 10 }">
                 <a class="page-link" ng-href="/statements/browse/{{routeParams.sort}}/{{routeParams.direction}}/{{(routeParams.offset + 10)}}">Next</a>
             </li>
         </ul>
