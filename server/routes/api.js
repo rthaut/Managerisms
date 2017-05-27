@@ -38,7 +38,7 @@ exports.addRoutes = (app, config) => {
 
     //@TODO support for date range (i.e. today's best)?
 
-    db.statements.find({}, '-breakdown')
+    return db.statements.find({}, '-breakdown')
       .lean()
       .sort(sort)
       .skip(offset)
@@ -68,6 +68,7 @@ exports.addRoutes = (app, config) => {
 
     let limit = Math.abs(req.query.limit) || 10;
 
+    return db.statements.find({}, '-breakdown')
       .lean()
       .sort({ 'rating.average': -1 })
       .limit(limit)
@@ -84,7 +85,7 @@ exports.addRoutes = (app, config) => {
 
   app.get('/api/statements/:id', (req, res) => {
 
-    db.statements.findById(req.params.id)
+    return db.statements.findById(req.params.id)
       .populate('breakdown.phrase')
       .populate('breakdown.word')
       .populate('rating.ratings')
@@ -107,7 +108,7 @@ exports.addRoutes = (app, config) => {
 
   app.post('/api/statements/analyze', (req, res) => {
 
-    helpers.statement.analyze(req.body.text)
+    return helpers.statement.analyze(req.body.text)
       .then((analysis) => {
         return res.json(analysis);
       })
@@ -123,13 +124,13 @@ exports.addRoutes = (app, config) => {
     const rating = parseInt(req.body.rating, 10);
     const session_id = req.sessionID;
 
-    db.statements.findById(req.params.id)
+    return db.statements.findById(req.params.id)
       .populate('rating.ratings')
       .exec().then((statement) => {
 
         if (rating === 0) {
 
-          // delete any existing rating(s) for this statement from this session
+          // delete any existing rating(s) for this statement from the session
           statement.rating.ratings = statement.rating.ratings.filter((val) => val.session_id !== session_id);
 
         } else {
@@ -156,7 +157,7 @@ exports.addRoutes = (app, config) => {
 
         statement.rating.count = statement.rating.ratings.length;
 
-        statement.save().then((statement) => {
+        return statement.save().then((statement) => {
 
           // store the statement's rating directly on the session for quick retrieval
           if (req.session.ratings === undefined) {
@@ -171,14 +172,14 @@ exports.addRoutes = (app, config) => {
 
       }).catch((err) => {
         console.error('error', err);
-        return res.status(500).send(err); //@TODO determine HTTP status code to use... maybe switch on err.code?
+        return res.status(500).send(err); //@TODO determine HTTP status code to use
       });
 
   });
 
   app.post('/api/statements', (req, res) => {
 
-    helpers.statement.analyze(req.body.text)
+    return helpers.statement.analyze(req.body.text)
       .then((analysis) => {
 
         if (!analysis.validation.valid) {
@@ -193,8 +194,6 @@ exports.addRoutes = (app, config) => {
           'score': analysis.score
         });
 
-        // the breakdown is sent separately from the statement by the client
-        // as there are some additional and some missing properties needed for the database
         for (let i = 0; i < analysis.breakdown.length; i++) {
           statement.breakdown.push({
             'position': i,
@@ -205,7 +204,7 @@ exports.addRoutes = (app, config) => {
           });
         }
 
-        statement.save().then((statement) => {
+        return statement.save().then((statement) => {
           return res.json(statement);
         });
 
