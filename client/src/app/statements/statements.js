@@ -27,7 +27,7 @@ angular.module('statements', [])
     $http.get('/api/statements', { 'params': $routeParams }).then(function (data) {
       $scope.statements = data.data;
     }).catch(function (error) {
-      if (error.data.errmsg) {
+      if (error.data && error.data.errmsg) {
         $scope.error = error.data.errmsg;
       } else if (error.data) {
         $scope.error = error.data;
@@ -96,7 +96,7 @@ angular.module('statements', [])
           'buttons': buttons
         });
       }).catch(function (error) {
-        if (error.data.errmsg) {
+        if (error.data && error.data.errmsg) {
           $scope.error = error.data.errmsg;
         } else if (error.data) {
           $scope.error = error.data;
@@ -135,10 +135,10 @@ angular.module('statements', [])
         $scope.statement = response.data;
         $location.path('/statements/view/' + $scope.statement._id);
       }).catch(function (error) {
-        if (error.data.code === 11000) {
+        if (error.data && error.data.code && error.data.code === 11000) {
           $scope.error = 'Someone has already claimed that statement.'
         } else {
-          if (error.data.errmsg) {
+          if (error.data && error.data.errmsg) {
             $scope.error = error.data.errmsg;
           } else if (error.data) {
             $scope.error = error.data;
