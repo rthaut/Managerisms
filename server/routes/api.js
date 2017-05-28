@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const db = require('../database');
 const helpers = require('../lib/');
 
-exports.addRoutes = (app, config) => {
+exports.addRoutes = (app) => {
 
   //@TODO the complex aggregation used here is really only needed for sorting by rating...
   //      perhaps it would be better to use a normal find({}) for everything else instead

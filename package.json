@@ -24,7 +24,6 @@
     "express": "^4.15.2",
     "express-namespace": "^0.1.1",
     "express-session": "^1.15.2",
-    "greenlock-express": "^2.0.11",
     "gulp-replace": "^0.5.4",
     "lemmatizer": "0.0.1",
     "mongodb": "^2.2.25",
