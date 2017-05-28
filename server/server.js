@@ -20,7 +20,7 @@ mongoose.Promise = require('q').Promise;
 mongoose.connect(`mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'MongoDB Connection Error'));
-conn.once('open', function() {
+conn.once('open', function () {
   console.log("\t" + `Connected to MongoDB "${process.env.DB_NAME}" database (${process.env.DB_HOST}:${process.env.DB_PORT})` + "\n");
   require('./database/import')();
 });

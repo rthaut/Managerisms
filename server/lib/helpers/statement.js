@@ -431,10 +431,10 @@ const getFeedback = function (points) {
 
     { 'points': 300, 'feedback': 'You\'ve peaked. Game over. Go schedule some 1:1 meetings.' },
     { 'points': 275, 'feedback': '🔥🔥🔥 (It doesn\'t really get any better than this.)' },
-    { 'points': 250, 'feedback': 'Shareholders swoon at the sight of you.'},
+    { 'points': 250, 'feedback': 'Shareholders swoon at the sight of you.' },
     { 'points': 225, 'feedback': 'That\'s some executive-level word manipulation right there.' },
     { 'points': 200, 'feedback': 'English is your bitch. Congratulations!' },
-    { 'points': 175, 'feedback': 'OK, you\'re en *experienced* manager/salesperson.' },
+    { 'points': 175, 'feedback': 'OK, you\'re an *experienced* manager/salesperson.' },
     { 'points': 150, 'feedback': 'You must be a manager. Or a salesperson.' },
     { 'points': 125, 'feedback': 'Scott Adams would be proud (or mortified... probably mortified).' },
     { 'points': 100, 'feedback': 'I can tell a seasoned veteran by the way (s)he talks.' },

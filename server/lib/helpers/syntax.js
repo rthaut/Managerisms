@@ -1,4 +1,4 @@
-exports.validate = validate = function(classifications) {
+exports.validate = validate = function (classifications) {
 
   const validSyntaxes = getValidSyntaxes();
 
@@ -24,7 +24,7 @@ exports.validate = validate = function(classifications) {
  * @param {Array} classifications
  * @return {Array}
  */
-exports.getAllCombinations = getAllCombinations = function(classifications) {
+exports.getAllCombinations = getAllCombinations = function (classifications) {
 
   let total = 1;
   for (let i = 0; i < classifications.length; i++) {
