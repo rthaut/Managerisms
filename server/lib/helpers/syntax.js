@@ -1,3 +1,5 @@
+require('./array');
+
 exports.validate = validate = function (classifications) {
 
   const validSyntaxes = getValidSyntaxes();
@@ -10,8 +12,8 @@ exports.validate = validate = function (classifications) {
 
       if (RegExp('^' + validSyntaxes[i] + '$').test(variations[j].join(''))) {
         return variations[j];
-        break;
       }
+
     }
 
   }
@@ -26,11 +28,9 @@ exports.validate = validate = function (classifications) {
  */
 exports.getAllCombinations = getAllCombinations = function (classifications) {
 
-  let total = 1;
   for (let i = 0; i < classifications.length; i++) {
 
-    total *= classifications[i].length;
-
+    // wrap all classifications in angle brackets
     for (let j = 0; j < classifications[i].length; j++) {
       if (classifications[i][j].indexOf('<') === -1 && classifications[i][j].indexOf('>') === -1) {
         classifications[i][j] = '<' + classifications[i][j] + '>';
@@ -39,25 +39,7 @@ exports.getAllCombinations = getAllCombinations = function (classifications) {
 
   }
 
-  let variations = [];
-  let step, target;
-  for (let i = 0; i < classifications.length; i++) {
-
-    step = Math.ceil((total / classifications[i].length) / (Math.pow(classifications[i].length, i)));
-
-    for (let j = 0; j < total; j++) {
-
-      if (!Array.isArray(variations[j])) {
-        variations[j] = [];
-      }
-
-      target = (Math.floor(j / step) % classifications[i].length);
-      variations[j].push(classifications[i][target]);
-
-    }
-
-  }
-
+  variations = classifications.implodeNested(classifications);
   return variations;
 
 };
