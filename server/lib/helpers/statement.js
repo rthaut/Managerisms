@@ -81,6 +81,7 @@ const clean = function (text) {
     .replace(/([\w]+)\'(ll)/g, '$1 will')
     .replace(/([\w]+)\'(d)/g, '$1 had')
     .replace(/([\w]+)\'(s)/g, '$1 is')
+    .replace(/([\w]+)n\'(t)/g, '$1 not')
 
     // remove special characters
     .replace(/[\`\~\!\@\#\$\%\^\&\*\(\)\-\=\_\+\[\]\{\}\\\|\;\:\'\"\<\>\?\,\.\/]/g, '')
