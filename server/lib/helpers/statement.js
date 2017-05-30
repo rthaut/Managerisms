@@ -225,7 +225,7 @@ const getBreakdown = function (text) {
  */
 const lookupWords = function (statementWords, databaseWords) {
   const dbWordValues = databaseWords.map((val) => val.value);
-  const unknownWords = statementWords.filter((val) => dbWordValues.indexOf(val) === -1);
+  const unknownWords = statementWords.filter((val, idx, arr) => (dbWordValues.indexOf(val) === -1) && (arr.indexOf(val) === idx));
   console.warn('unknown words', unknownWords);
 
   if (!unknownWords.length) {
