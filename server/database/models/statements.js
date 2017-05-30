@@ -88,7 +88,7 @@ StatementSchema.pre('save', function (next) {
     }
 
     // store the number of ratings on the statement as a rating property
-    this.rating.count = this.ratings.length;
+    this.rating.count = this.rating.ratings.length;
   }
 
   next();
