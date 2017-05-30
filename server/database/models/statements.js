@@ -79,13 +79,16 @@ StatementSchema.pre('save', function (next) {
   this.wasNew = this.isNew;
 
   if (this.isModified('rating.ratings')) {
-    // calculate the statement's average rating after updating a statement
 
+    // calculate the statement's average rating after updating a statement
     if (this.rating.ratings.length) {
       this.rating.average = this.rating.ratings.reduce((acc, val) => acc + val.value, 0) / this.rating.ratings.length;
     } else {
       this.rating.average = 0;
     }
+
+    // store the number of ratings on the statement as a rating property
+    this.rating.count = this.ratings.length;
   }
 
   next();
