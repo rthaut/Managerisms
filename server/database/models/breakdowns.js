@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const classifications = require('../').classifications;
-
 let BreakdownSchema = new Schema({
   'position': {
     'type': Number,
